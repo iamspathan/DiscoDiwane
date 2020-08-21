@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1078351200706",
+    "firebase_url": "https://cityvibe-9d283.firebaseio.com",
+    "project_id": "cityvibe-9d283",
+    "storage_bucket": "cityvibe-9d283.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078351200706:android:0fb018676d898dc67d965b",
+        "android_client_info": {
+          "package_name": "org.gdgnagpur.cityvibe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1078351200706-gp6g1ee5ta98mci8h6qqaf7juo716t9t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeVK4Q7T2xGpWxekWDQ_aPuRgb_bU4Mpg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1078351200706-gp6g1ee5ta98mci8h6qqaf7juo716t9t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
