@@ -1,3 +1,6 @@
+package com.google.samples.propertyanimation
+
+
 /*
  * Copyright (C) 2019 The Android Open Source Project
  *
@@ -14,13 +17,25 @@
  * limitations under the License.
  */
 
-package com.google.samples.propertyanimation
-
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationSet
+import android.view.animation.LinearInterpolator
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
-
+import androidx.appcompat.widget.AppCompatImageView
 
 class MainActivity : AppCompatActivity() {
 
@@ -70,21 +85,92 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun rotater() {
+        val animator = ObjectAnimator.ofFloat(star, View.ROTATION, -360f,0f)
+        animator.duration = 1000
+        animator.disableButton(rotateButton)
+        animator.start()
     }
 
     private fun translater() {
+        val animator = ObjectAnimator.ofFloat(star,View.TRANSLATION_X,200f)
+        animator.repeatCount = 1
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.disableButton(translateButton)
+        animator.start()
     }
 
     private fun scaler() {
+        val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X,
+        10f)
+        val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y,
+            10f)
+        val animator = ObjectAnimator.ofPropertyValuesHolder(star,scaleX,scaleY)
+        animator.repeatCount = 1
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.disableButton(scaleButton)
+        animator.start()
+
     }
 
     private fun fader() {
+        val animator = ObjectAnimator.ofFloat(star,View.ALPHA,0f)
+        animator.repeatCount = 1
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.disableButton(fadeButton)
+        animator.start()
     }
 
     private fun colorizer() {
+        val animator = ObjectAnimator.ofArgb(star.parent, "backgroundColor", Color.BLACK, Color.RED, Color.YELLOW)
+        animator.repeatCount = 1
+        animator.duration = 500
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.disableButton(colorizeButton)
+        animator.start()
     }
 
     private fun shower() {
+
+        val container = star.parent as ViewGroup
+        val containerW = container.width
+        val containerH = container.height
+        var starW = star.width.toFloat()
+        var starH = star.height.toFloat()
+        val newStar = AppCompatImageView(this)
+        newStar.setImageResource(R.drawable.ic_star)
+        newStar.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT )
+        container.addView(newStar)
+        newStar.scaleX = Math.random().toFloat() * 1.5f + .1f
+        newStar.scaleY = newStar.scaleX
+        starW *= newStar.scaleX
+        starH*= newStar.scaleY
+        newStar.translationX = Math.random().toFloat() * containerW - starW / 2
+
+        val mover = ObjectAnimator.ofFloat(newStar,View.TRANSLATION_Y,-starH, containerH+starH)
+        mover.interpolator = AccelerateInterpolator(1f)
+        val rotator = ObjectAnimator.ofFloat(newStar, View.ROTATION, (Math.random() * 1080).toFloat())
+        rotator.interpolator = LinearInterpolator()
+
+        val set = AnimatorSet()
+        set.playTogether(mover,rotator)
+        set.duration = (Math.random() * 1500 + 500).toLong()
+        set.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                container.removeView(newStar)
+            }
+        })
+        set.start()
     }
+     private fun ObjectAnimator.disableButton(button: View){
+         addListener(object :AnimatorListenerAdapter(){
+             override fun onAnimationEnd(animation: Animator?) {
+                 button.isEnabled = true
+             }
+
+             override fun onAnimationStart(animation: Animator?) {
+                 button.isEnabled = false
+             }
+         })
+     }
 
 }
